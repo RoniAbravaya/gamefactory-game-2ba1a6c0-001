@@ -1,101 +1,105 @@
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
-import 'package:flame/input.dart';
-import 'package:flutter/services.dart';
+import 'package:flame/sprite.dart';
+import 'package:flutter/material.dart';
 
-/// Represents the player in a platformer game, handling movement, animations, and interactions.
-class Player extends SpriteAnimationComponent
-    with HasGameRef, Hitbox, Collidable, KeyboardHandler {
-  Vector2 velocity = Vector2.zero();
-  final double gravity = 800;
-  final double jumpSpeed = -350;
-  bool onGround = false;
+/// Represents the player character in the platformer game.
+class Player extends SpriteAnimationComponent with HasGameRef, Hitbox, Collidable {
+  static const double gravity = 800; // Pixels per second squared.
+  static const double jumpSpeed = -350; // Initial speed at the start of a jump, pixels per second.
+  static const int invulnerabilityTime = 2000; // Milliseconds of invulnerability after being hit.
 
-  // Player states
-  late SpriteAnimation idleAnimation;
-  late SpriteAnimation movingAnimation;
-  late SpriteAnimation jumpingAnimation;
+  double ySpeed = 0; // Vertical speed, pixels per second.
+  bool onGround = false; // Is the player on the ground?
+  bool isInvulnerable = false; // Is the player currently invulnerable?
+  DateTime lastHitTime; // Last time the player was hit.
 
-  // Player properties
-  int lives = 3;
-  int score = 0;
-
-  Player()
-      : super(size: Vector2(48, 48), anchor: Anchor.center);
+  Player(Vector2 position, Vector2 size)
+      : super(position: position, size: size, anchor: Anchor.center) {
+    addHitbox(HitboxRectangle());
+  }
 
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    await _loadAnimations();
-    animation = idleAnimation;
-    addHitbox(HitboxRectangle());
-  }
-
-  /// Loads all animations for the player.
-  Future<void> _loadAnimations() async {
-    final spriteSheet = SpriteSheet(
-      image: await gameRef.images.load('player_spritesheet.png'),
-      srcSize: Vector2(48, 48),
+    final spriteSheet = await gameRef.images.load('player_spritesheet.png');
+    final spriteSize = Vector2(48, 48);
+    animation = SpriteAnimation.fromFrameData(
+      spriteSheet,
+      SpriteAnimationData.sequenced(
+        amount: 4,
+        stepTime: 0.1,
+        textureSize: spriteSize,
+        loop: true,
+      ),
     );
-    idleAnimation = spriteSheet.createAnimation(row: 0, stepTime: 0.1, to: 4);
-    movingAnimation = spriteSheet.createAnimation(row: 1, stepTime: 0.1, to: 4);
-    jumpingAnimation = spriteSheet.createAnimation(row: 2, stepTime: 0.1, to: 4);
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    velocity.y += gravity * dt;
-    position += velocity * dt;
+    ySpeed += gravity * dt;
+    position.add(Vector2(0, ySpeed * dt));
 
-    if (position.y > gameRef.size.y) {
-      onDied();
+    // Check for landing on the ground.
+    if (position.y > gameRef.size.y - size.y / 2) {
+      position.y = gameRef.size.y - size.y / 2;
+      ySpeed = 0;
+      onGround = true;
     }
 
-    // Update animation based on the player's state
-    if (!onGround) {
-      animation = jumpingAnimation;
-    } else if (velocity.x != 0) {
-      animation = movingAnimation;
-    } else {
-      animation = idleAnimation;
+    // Handle invulnerability duration.
+    if (isInvulnerable && DateTime.now().difference(lastHitTime).inMilliseconds > invulnerabilityTime) {
+      isInvulnerable = false;
     }
   }
 
-  @override
-  bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    final isKeyDown = event is RawKeyDownEvent;
-    if (keysPressed.contains(LogicalKeyboardKey.space) && isKeyDown && onGround) {
-      velocity.y = jumpSpeed;
+  /// Makes the player jump if they are on the ground.
+  void jump() {
+    if (onGround) {
+      ySpeed = jumpSpeed;
       onGround = false;
     }
-    return super.onKeyEvent(event, keysPressed);
   }
 
-  /// Called when the player collides with the ground.
-  void onLand() {
-    onGround = true;
-    velocity.y = 0;
-  }
-
-  /// Called when the player dies (loses all lives or falls off the map).
-  void onDied() {
-    lives--;
-    if (lives <= 0) {
-      // Handle game over logic here
-    } else {
-      // Reset player position or handle life loss
-    }
-  }
-
-  /// Increases the player's score.
-  void increaseScore(int points) {
-    score += points;
-  }
-
+  /// Handles collision with other [Collidable] objects.
   @override
   void onCollision(Set<Vector2> intersectionPoints, Collidable other) {
     super.onCollision(intersectionPoints, other);
-    // Handle collision with platforms, enemies, and collectibles here
+    if (other is Obstacle && !isInvulnerable) {
+      takeDamage();
+    } else if (other is Collectible) {
+      collectItem(other);
+    }
+  }
+
+  /// Reduces the player's health and triggers invulnerability.
+  void takeDamage() {
+    // Implement health reduction and invulnerability logic here.
+    isInvulnerable = true;
+    lastHitTime = DateTime.now();
+    // Placeholder for health reduction logic.
+  }
+
+  /// Collects the specified [Collectible] item.
+  void collectItem(Collectible item) {
+    // Implement item collection logic here.
+    // Placeholder for collectible logic.
+  }
+}
+
+/// Represents an obstacle in the game.
+class Obstacle extends SpriteComponent with Hitbox, Collidable {
+  Obstacle(Vector2 position, Vector2 size, Sprite sprite)
+      : super(position: position, size: size, sprite: sprite) {
+    addHitbox(HitboxRectangle());
+  }
+}
+
+/// Represents a collectible item in the game.
+class Collectible extends SpriteComponent with Hitbox, Collidable {
+  Collectible(Vector2 position, Vector2 size, Sprite sprite)
+      : super(position: position, size: size, sprite: sprite) {
+    addHitbox(HitboxRectangle());
   }
 }

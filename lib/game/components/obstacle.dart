@@ -1,62 +1,44 @@
 import 'package:flame/components.dart';
-import 'package:flame/geometry.dart';
-import 'package:flame/sprite.dart';
+import 'package:flame/collisions.dart';
+import 'package:flutter/material.dart';
 
-/// A component representing an obstacle in a platformer game.
-///
-/// It includes a visual representation, collision detection, and can deal damage to the player on contact.
-class Obstacle extends PositionComponent with HasHitboxes, Collidable {
-  final Vector2 _size;
-  final String _spritePath;
-  final double _movementSpeed;
-  bool _isMoving;
-  Vector2 _movementDirection;
+class Obstacle extends PositionComponent with CollisionCallbacks {
+  final double moveSpeed;
+  final Vector2 direction;
 
-  /// Creates a new obstacle.
-  ///
-  /// [size] specifies the size of the obstacle.
-  /// [spritePath] is the path to the sprite image.
-  /// [movementSpeed] determines how fast the obstacle moves.
-  /// [isMoving] indicates whether the obstacle is stationary or moving.
-  /// [movementDirection] specifies the direction of movement if the obstacle is moving.
   Obstacle({
+    required Vector2 position,
     required Vector2 size,
-    required String spritePath,
-    double movementSpeed = 0,
-    bool isMoving = false,
-    Vector2? movementDirection,
-  })  : _size = size,
-        _spritePath = spritePath,
-        _movementSpeed = movementSpeed,
-        _isMoving = isMoving,
-        _movementDirection = movementDirection ?? Vector2.zero() {
-    addHitbox(HitboxRectangle(relation: size));
-  }
+    this.moveSpeed = 150,
+    this.direction = const Vector2(0, 1),
+  }) : super(
+          position: position,
+          size: size,
+          anchor: Anchor.center,
+        );
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
-    size = _size;
-    if (_spritePath.isNotEmpty) {
-      sprite = await Sprite.load(_spritePath);
-    } else {
-      // Fallback to a simple shape if no sprite path is provided.
-      paint = Paint()..color = const Color(0xFFFF0000);
-    }
-    anchor = Anchor.center;
+    await super.onLoad();
+    add(RectangleHitbox());
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    if (_isMoving && _movementSpeed > 0) {
-      position += _movementDirection.normalized() * _movementSpeed * dt;
+    position += direction * moveSpeed * dt;
+    
+    if (position.y > 900 || position.y < -100 ||
+        position.x > 500 || position.x < -100) {
+      removeFromParent();
     }
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, Collidable other) {
-    super.onCollision(intersectionPoints, other);
-    // Handle collision effects, like dealing damage to the player.
+  void render(Canvas canvas) {
+    canvas.drawRect(
+      size.toRect(),
+      Paint()..color = Colors.red,
+    );
   }
 }
