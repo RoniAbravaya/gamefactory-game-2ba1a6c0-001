@@ -1,0 +1,244 @@
+{
+  "levels": [
+    {
+      "level_number": 1,
+      "name": "First Leap",
+      "is_free": true,
+      "unlock_requirement": "none",
+      "difficulty": 0.1,
+      "time_limit_seconds": null,
+      "target_score": 100,
+      "obstacles": {
+        "type": "static",
+        "count": 2,
+        "speed": 0
+      },
+      "collectibles": {
+        "type": "coin",
+        "count": 10,
+        "value": 10
+      },
+      "special_features": [
+        "basic_jumps"
+      ],
+      "background_theme": "sunny_day",
+      "music_track": "happy_hop"
+    },
+    {
+      "level_number": 2,
+      "name": "Rising Steps",
+      "is_free": true,
+      "unlock_requirement": "none",
+      "difficulty": 0.2,
+      "time_limit_seconds": null,
+      "target_score": 150,
+      "obstacles": {
+        "type": "static",
+        "count": 3,
+        "speed": 0
+      },
+      "collectibles": {
+        "type": "coin",
+        "count": 15,
+        "value": 10
+      },
+      "special_features": [
+        "introduce_double_jump"
+      ],
+      "background_theme": "morning_meadows",
+      "music_track": "bounce_along"
+    },
+    {
+      "level_number": 3,
+      "name": "Leap of Faith",
+      "is_free": true,
+      "unlock_requirement": "none",
+      "difficulty": 0.3,
+      "time_limit_seconds": null,
+      "target_score": 200,
+      "obstacles": {
+        "type": "static",
+        "count": 5,
+        "speed": 0
+      },
+      "collectibles": {
+        "type": "coin",
+        "count": 20,
+        "value": 10
+      },
+      "special_features": [
+        "introduce_triple_jump"
+      ],
+      "background_theme": "cloudy_skies",
+      "music_track": "wind_whispers"
+    },
+    {
+      "level_number": 4,
+      "name": "Moving On",
+      "is_free": false,
+      "unlock_requirement": "rewarded_ad",
+      "difficulty": 0.4,
+      "time_limit_seconds": null,
+      "target_score": 250,
+      "obstacles": {
+        "type": "moving",
+        "count": 2,
+        "speed": 1
+      },
+      "collectibles": {
+        "type": "coin",
+        "count": 25,
+        "value": 10
+      },
+      "special_features": [
+        "introduce_moving_platforms"
+      ],
+      "background_theme": "twilight_town",
+      "music_track": "mystic_move"
+    },
+    {
+      "level_number": 5,
+      "name": "Twist and Turn",
+      "is_free": false,
+      "unlock_requirement": "rewarded_ad",
+      "difficulty": 0.5,
+      "time_limit_seconds": null,
+      "target_score": 300,
+      "obstacles": {
+        "type": "moving",
+        "count": 5,
+        "speed": 2
+      },
+      "collectibles": {
+        "type": "coin",
+        "count": 30,
+        "value": 10
+      },
+      "special_features": [
+        "moving_obstacles"
+      ],
+      "background_theme": "night_navigator",
+      "music_track": "dark_dance"
+    },
+    {
+      "level_number": 6,
+      "name": "Skyward Bound",
+      "is_free": false,
+      "unlock_requirement": "rewarded_ad",
+      "difficulty": 0.6,
+      "time_limit_seconds": null,
+      "target_score": 350,
+      "obstacles": {
+        "type": "moving",
+        "count": 7,
+        "speed": 3
+      },
+      "collectibles": {
+        "type": "coin",
+        "count": 35,
+        "value": 10
+      },
+      "special_features": [
+        "variable_jump_height"
+      ],
+      "background_theme": "starry_night",
+      "music_track": "celestial_swing"
+    },
+    {
+      "level_number": 7,
+      "name": "The Gauntlet",
+      "is_free": false,
+      "unlock_requirement": "rewarded_ad",
+      "difficulty": 0.7,
+      "time_limit_seconds": null,
+      "target_score": 400,
+      "obstacles": {
+        "type": "mixed",
+        "count": 10,
+        "speed": 4
+      },
+      "collectibles": {
+        "type": "coin",
+        "count": 40,
+        "value": 10
+      },
+      "special_features": [
+        "introduce_hazards"
+      ],
+      "background_theme": "lava_lands",
+      "music_track": "heat_haze"
+    },
+    {
+      "level_number": 8,
+      "name": "Perilous Peaks",
+      "is_free": false,
+      "unlock_requirement": "rewarded_ad",
+      "difficulty": 0.8,
+      "time_limit_seconds": null,
+      "target_score": 450,
+      "obstacles": {
+        "type": "mixed",
+        "count": 12,
+        "speed": 5
+      },
+      "collectibles": {
+        "type": "coin",
+        "count": 45,
+        "value": 10
+      },
+      "special_features": [
+        "slippery_surfaces"
+      ],
+      "background_theme": "snowy_slopes",
+      "music_track": "chill_chase"
+    },
+    {
+      "level_number": 9,
+      "name": "Echoes of the Void",
+      "is_free": false,
+      "unlock_requirement": "rewarded_ad",
+      "difficulty": 0.9,
+      "time_limit_seconds": null,
+      "target_score": 500,
+      "obstacles": {
+        "type": "mixed",
+        "count": 15,
+        "speed": 6
+      },
+      "collectibles": {
+        "type": "coin",
+        "count": 50,
+        "value": 10
+      },
+      "special_features": [
+        "darkness_effect"
+      ],
+      "background_theme": "void_vista",
+      "music_track": "void_vibrations"
+    },
+    {
+      "level_number": 10,
+      "name": "Final Frontier",
+      "is_free": false,
+      "unlock_requirement": "rewarded_ad",
+      "difficulty": 1.0,
+      "time_limit_seconds": null,
+      "target_score": 550,
+      "obstacles": {
+        "type": "mixed",
+        "count": 20,
+        "speed": 7
+      },
+      "collectibles": {
+        "type": "coin",
+        "count": 55,
+        "value": 10
+      },
+      "special_features": [
+        "gravity_shifts"
+      ],
+      "background_theme": "cosmic_canyon",
+      "music_track": "galactic_groove"
+    }
+  ]
+}
